@@ -1,15 +1,43 @@
-## Put comments here that give an overall description of what your
-## functions do
+## Brandon Brunner
+## Data Science Analyst, ConocoPhillips
+## Johns Hopkins Data Science Specialization
+## Assignment: Course 2, Week 3
+## March 24, 2016 HAPPY EASTER (or spring equinox for you heathens)
 
-## Write a short comment describing this function
+## The function below uses lexical scoping to create a list
+## of a matrix and its determinant
 
 makeCacheMatrix <- function(x = matrix()) {
-
+     m <- NULL
+     set <- function(y) {
+          x <<- y
+          m <<- NULL
+     }
+     get <- function() x
+     setinverse <- function(solve) m <<- solve
+     getinverse <- function() m
+     list(set = set, get = get,
+          setinverse = setinverse,
+          getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
+## If a matrix is passed into the function below, it will compute the inverse
+## If a "matrix list" as created by makeCacheMatrix is passed in, the function
+## below will retrieve the inverse from the list
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+     if(class(x) == 'list') {      #if makeCacheMatrix is used
+          m <- x$getinverse()
+          if(!is.null(m)) {
+               message("getting cached data")
+               return(m)
+          }
+          data <- x$get()
+          m <- solve(data, ...)
+          x$setinverse(m)
+     } else {                      #if regular old matrix
+          m <- solve(x)
+     }
+     return(m)
 }
